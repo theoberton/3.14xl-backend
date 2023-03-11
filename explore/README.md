@@ -1,3 +1,6 @@
-Backend for pixel explore functionality
+Simple backend for pixel explore functionality
 
-To run application use command `yarn dev`
+Create .env.
+Create data folder for mapping volumes in order to run mongodb use docker-compose.yml
+
+Run application use command `yarn dev`

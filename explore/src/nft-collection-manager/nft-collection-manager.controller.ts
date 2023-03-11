@@ -18,8 +18,7 @@ import { ManagerQueryParams } from './nft-collection-manager.dto';
 import { HttpService } from '@nestjs/axios';
 import { UpdateNftCollectionManagerDto } from 'src/dto/updateNftCollectionManager.dto';
 
-const tonApiToken =
-  'eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsia29seWFuOTgiXSwiZXhwIjoxODM1NzEzODg4LCJpc3MiOiJAdG9uYXBpX2JvdCIsImp0aSI6IjVXR0xRQkhNVjZLV0VSQUJORlZUWUtISyIsInNjb3BlIjoic2VydmVyIiwic3ViIjoidG9uYXBpIn0.09owShXOZOQCQFfwqb12y3At-8fLB53zOFg5dfX-YeiuVbM-M-3wgwHifK6rY6AlSWC_P4GYppy7bycv4lQ2AQ';
+const tonApiToken = process.env.apiToken;
 
 @Controller('nft-collection-manager')
 export class NftCollectionManagerController {
@@ -34,8 +33,11 @@ export class NftCollectionManagerController {
     @Body() createNftCollectionManagerDto: CreateNftCollectionManagerDto,
     @Headers() headers,
   ) {
-    const isTestnet = headers.testnet === "true";
-    this.checkCollectionExistanceInBlockchain(createNftCollectionManagerDto.collectionAddress, isTestnet);
+    const isTestnet = headers.testnet === 'true';
+    this.checkCollectionExistanceInBlockchain(
+      createNftCollectionManagerDto.collectionAddress,
+      isTestnet,
+    );
 
     const exiting =
       await this.nftCollectionManagerService.findByCollectionAddress(
@@ -70,26 +72,26 @@ export class NftCollectionManagerController {
     @Body() updateNftCollectionManagerDto: UpdateNftCollectionManagerDto,
     @Headers() headers,
   ) {
-    const isTestnet = headers.testnet === "true";
+    const isTestnet = headers.testnet === 'true';
 
     const existing =
       await this.nftCollectionManagerService.findByCollectionManagerAddress(
         address,
-        isTestnet
+        isTestnet,
       );
 
     if (!existing) {
       throw new BadRequestException({
         message: 'Could not find collection',
       });
-    }    
+    }
 
     try {
       const updateNftCollectionManager =
         await this.nftCollectionManagerService.updateByNftCollectionManagerAddress(
           address,
           updateNftCollectionManagerDto,
-          isTestnet
+          isTestnet,
         );
 
       return response.status(HttpStatus.OK).json(updateNftCollectionManager);
@@ -107,7 +109,7 @@ export class NftCollectionManagerController {
     @Headers() headers,
     @Query() { skip, limit = 20, ownerAddress }: ManagerQueryParams,
   ) {
-    const isTestnet = headers.testnet === "true";
+    const isTestnet = headers.testnet === 'true';
 
     const baseQuery: any = { isTestnet };
 
@@ -128,7 +130,7 @@ export class NftCollectionManagerController {
     const existing =
       await this.nftCollectionManagerService.findByCollectionManagerAddress(
         address,
-        isTestnet
+        isTestnet,
       );
 
     if (!existing) {
@@ -139,8 +141,11 @@ export class NftCollectionManagerController {
     }
   }
 
-  async checkCollectionExistanceInBlockchain(address: string, isTestnet: boolean) {
-    if(isTestnet) {
+  async checkCollectionExistanceInBlockchain(
+    address: string,
+    isTestnet: boolean,
+  ) {
+    if (isTestnet) {
       return;
     }
 
