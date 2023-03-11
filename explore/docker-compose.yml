@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:4.0.28
+    hostname: mongodb
+    container_name: mongodb_pixel
+    environment:
+      MONGO_INITDB_DATABASE: pixel
+      MONGO_INITDB_ROOT_USERNAME: jonathan_moore
+      MONGO_INITDB_ROOT_PASSWORD: kolya123
+    ports:
+      - '27029:27017'
+    restart: unless-stopped
+    volumes:
+      - /Users/nick/Documents/Projects/light-backend/data:/data/db
+    networks:
+      - pixel
+
+networks:
+  pixel:
+    external: true
