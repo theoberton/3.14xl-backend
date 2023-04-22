@@ -36,7 +36,7 @@ import * as Joi from '@hapi/joi';
         );
 
         return {
-          uri: `mongodb://${username}:${password}@${host}:${port}`,
+          uri: `mongodb://${host}:${port}`,
           dbName: database,
         };
       },
